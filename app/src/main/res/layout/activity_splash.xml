@@ -8,7 +8,7 @@
     android:background="@drawable/splash_gradient"
     tools:context=".SplashActivity">
 
-    <!-- App Logo -->
+
     <ImageView
         android:id="@+id/logo"
         android:layout_width="120dp"
@@ -16,7 +16,7 @@
         android:src="@drawable/ic_tripgenie_logo"
         android:layout_centerInParent="true"/>
 
-    <!-- Progress Bar -->
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"

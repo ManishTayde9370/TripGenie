@@ -1,108 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="20dp"
-    android:fillViewport="true"
-    android:background="@drawable/bg_gradient">
+    android:gravity="center"
+    android:background="@drawable/home_gradient"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <!-- Title -->
+    <TextView
+        android:text="AI Trip Itinerary Planner"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:shadowColor="#40000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Destination Input -->
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="20dp"
+        android:hint="Enter destination"
+        app:boxStrokeColor="@color/md_theme_light_primary"
+        app:hintTextColor="@color/md_theme_light_onPrimary">
 
-        <!-- Header -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="✈️ Plan Your Next Adventure"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:paddingBottom="16dp" />
-
-        <!-- Destination -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/placeInput"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:padding="12dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Destination">
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDestination"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@android:drawable/ic_menu_mylocation" />
-        </com.google.android.material.textfield.TextInputLayout>
+    <!-- Number of Days Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Number of days"
+        app:boxStrokeColor="@color/md_theme_light_primary"
+        app:hintTextColor="@color/md_theme_light_onPrimary">
 
-        <!-- Start Date -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/daysInput"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:padding="12dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Start Date"
-            android:layout_marginTop="12dp">
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etStartDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:drawableStart="@android:drawable/ic_menu_today" />
-        </com.google.android.material.textfield.TextInputLayout>
+    <!-- Budget Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Estimated budget (₹)"
+        app:boxStrokeColor="@color/md_theme_light_primary"
+        app:hintTextColor="@color/md_theme_light_onPrimary">
 
-        <!-- End Date -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/budgetInput"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:padding="12dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="End Date"
-            android:layout_marginTop="12dp">
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEndDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:drawableStart="@android:drawable/ic_menu_today" />
-        </com.google.android.material.textfield.TextInputLayout>
+    <!-- Travelers Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Number of travelers"
+        app:boxStrokeColor="@color/md_theme_light_primary"
+        app:hintTextColor="@color/md_theme_light_onPrimary">
 
-        <!-- Travelers -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/travelersInput"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:padding="12dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Number of Travelers"
-            android:layout_marginTop="12dp">
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTravelers"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:drawableStart="@android:drawable/ic_menu_myplaces" />
-        </com.google.android.material.textfield.TextInputLayout>
+    <!-- Generate Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/generateButton"
+        android:text="Generate Itinerary"
+        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cornerRadius="16dp"
+        android:textColor="@color/md_theme_light_onPrimary"
+        app:backgroundTint="@color/md_theme_light_primary" />
 
-        <!-- Generate Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGeneratePlan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="✨ Generate Trip with AI"
-            android:textAllCaps="false"
-            android:textSize="18sp"
-            android:layout_marginTop="16dp"
-            app:cornerRadius="16dp"
-            android:backgroundTint="@color/purple_500"
-            android:textColor="@android:color/white" />
+    <!-- RecyclerView for Cards -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/itineraryRecyclerView"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never" />
 
-        <!-- RecyclerView for Itinerary -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvItinerary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</LinearLayout>

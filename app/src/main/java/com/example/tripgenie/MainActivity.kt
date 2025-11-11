@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
-        // Default fragment
         if (savedInstanceState == null) {
             loadFragment(HomeFragment())
         }

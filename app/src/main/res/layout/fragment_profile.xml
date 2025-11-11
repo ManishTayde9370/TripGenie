@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="20dp"
     android:background="@drawable/home_gradient">
 
     <LinearLayout
@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Profile Picture -->
+        <!-- 👤 Profile Picture -->
         <ImageView
             android:id="@+id/profileImage"
             android:layout_width="120dp"
@@ -21,96 +21,112 @@
             android:scaleType="centerCrop"
             android:background="@drawable/circle_background"
             android:padding="4dp"
-            android:contentDescription="Profile Picture"
-            android:layout_marginTop="24dp"/>
+            android:layout_marginTop="24dp"
+            android:contentDescription="Profile Picture" />
 
-        <!-- User Name -->
+        <!-- 👋 Name & Email -->
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="John Doe"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-medium" />
 
-        <!-- Email -->
         <TextView
             android:id="@+id/userEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="john.doe@example.com"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"/>
+            android:textColor="#E0E0E0"
+            android:textSize="14sp" />
+
+        <!-- 🏅 Traveler Badge -->
+        <TextView
+            android:id="@+id/userBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌍 Explorer"
+            android:textColor="#FFD700"
+            android:textStyle="bold"
+            android:padding="6dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/badge_background"
+            android:textSize="13sp" />
 
         <!-- Divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="20dp"
-            android:background="#80FFFFFF"/>
+            android:background="#60FFFFFF" />
 
-        <!-- Profile Options -->
+        <!-- ✏️ Editable Fields -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="20dp">
 
-            <com.google.android.material.card.MaterialCardView
+            <!-- Name -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:hint="Full Name">
 
-                <TextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEditName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="Edit Profile"
-                    android:textSize="16sp"/>
-            </com.google.android.material.card.MaterialCardView>
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.card.MaterialCardView
+            <!-- Email -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:hint="Email Address"
+                android:layout_marginTop="12dp">
 
-                <TextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEditEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="My Trips"
-                    android:textSize="16sp"/>
-            </com.google.android.material.card.MaterialCardView>
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="Settings"
-                    android:textSize="16sp"/>
-            </com.google.android.material.card.MaterialCardView>
-
+            <!-- Save Changes -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/logoutButton"
+                android:id="@+id/btnSaveProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="💾 Save Changes"
+                android:textAllCaps="false"
                 android:layout_marginTop="16dp"
-                android:text="Logout"
-                style="@style/Widget.Material3.Button"
-                android:backgroundTint="@color/red"/>
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white"
+                app:cornerRadius="16dp" />
         </LinearLayout>
+
+
+
+
+
+        <!-- 🔴 Logout Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="🚪 Logout"
+            style="@style/Widget.Material3.Button"
+            android:backgroundTint="@color/red"
+            android:textColor="@android:color/white"
+            app:cornerRadius="16dp" />
     </LinearLayout>
 </ScrollView>

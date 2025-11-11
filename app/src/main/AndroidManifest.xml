@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TripGenie"
         tools:targetApi="31">
+        <activity
+            android:name=".SafetyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.aicore.API_KEY"
+            android:value="AIzaSyBV3pxIh0x71L9eIeu8WkKQbSP4H50HaKQ" />
 
         <activity
             android:name=".SplashActivity"
@@ -27,9 +44,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>

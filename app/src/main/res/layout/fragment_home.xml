@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/home_gradient"
     android:fillViewport="true"
-    android:padding="16dp"
-    tools:context=".HomeFragment">
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,205 +13,255 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Welcome Text -->
+        <!-- 🧭 Greeting Section -->
         <TextView
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hi, Traveler 👋"
-            android:textSize="22sp"
-            android:textStyle="bold"
+            android:text="Good Morning, Traveler!"
             android:textColor="@android:color/white"
-            android:paddingBottom="16dp"/>
+            android:textStyle="bold"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="12dp"
+            android:shadowColor="#55000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4" />
 
-        <!-- Search Bar -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/dailyQuote"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Search destinations..."
-            app:startIconDrawable="@android:drawable/ic_menu_search">
+            android:text="“Travel far enough to meet yourself.” 🌍"
+            android:textColor="#E0E0E0"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:gravity="center"
+            android:padding="8dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/searchBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Quick Actions -->
+        <!-- ✨ Quick Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="20dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnPlanAI"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="AI Trip ✈️"/>
+            android:layout_marginTop="16dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEvents"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:text="🎉 Events"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white"
+                app:cornerRadius="24dp"
+                android:elevation="4dp"
                 android:layout_marginEnd="8dp"
-                android:text="Events 🎉"/>
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:rippleColor="?attr/colorOnPrimaryContainer" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSafety"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Safety 🔒"/>
+                android:text="🛡 Safety"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white"
+                app:cornerRadius="24dp"
+                android:elevation="4dp"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:rippleColor="?attr/colorOnPrimaryContainer" />
+
         </LinearLayout>
 
-        <!-- Popular Destinations -->
-        <TextView
+        <!-- 🌍 App Description Section -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Popular Destinations"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="28dp"
-            android:paddingBottom="8dp"/>
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/purple_500"
+            app:strokeWidth="1dp"
+            android:backgroundTint="@android:color/white">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <!-- Destination Card 1 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="140dp"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="6dp">
+                    android:text="✨ About TripGenei AI"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/purple_500"
+                    android:gravity="center"
+                    android:paddingBottom="8dp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:src="@drawable/img_3"
-                            android:scaleType="centerCrop"
-                            android:contentDescription="Paris - Eiffel Tower"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:text="Paris"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:gravity="center"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Destination Card 2 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="140dp"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="6dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:src="@drawable/img_2"
-                            android:scaleType="centerCrop"
-                            android:contentDescription="Tokyo - Safety Travel"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:text="Tokyo"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:gravity="center"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Destination Card 3 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="6dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:src="@drawable/img_1"
-                            android:scaleType="centerCrop"
-                            android:contentDescription="New York - Local Events"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:text="New York"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:gravity="center"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
+                    android:text="Your smart travel companion powered by AI — plan your trips, explore upcoming events, and stay safe with real-time insights."
+                    android:textSize="15sp"
+                    android:textColor="#333333"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp"
+                    android:paddingHorizontal="8dp" />
             </LinearLayout>
-        </HorizontalScrollView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Travel Tips -->
+        <!-- 🚀 Feature Highlights -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Travel Tips"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:text="What We Offer"
             android:textColor="@android:color/white"
-            android:layout_marginTop="28dp"/>
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="28dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp">
+
+            <!-- Feature 1 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#FFFFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_auto_awesome"
+                        app:tint="@color/purple_500"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🧠 AI Trip Planner – Generate smart day-wise itineraries."
+                        android:textSize="15sp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Feature 2 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#FFFFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_baseline_event_24"
+                        app:tint="@color/purple_500"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🎟 Local Events – Discover concerts, festivals &amp; activities."
+                        android:textSize="15sp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Feature 3 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#FFFFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_baseline_security_24"
+                        app:tint="@color/purple_500"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🛡 Smart Safety Checker – Real-time weather &amp; area insights."
+                        android:textSize="15sp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- 💡 Travel Tips Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Travel Tip of the Day"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="28dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            android:backgroundTint="#FFFFFFFF"
+            app:strokeColor="@color/purple_500"
+            app:strokeWidth="1dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="💡 Always keep your important documents backed up digitally."
-                android:textSize="14sp"/>
+                android:text="💡 Always keep a copy of your passport &amp; important documents in the cloud."
+                android:textColor="#000000"
+                android:textSize="15sp" />
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
 </ScrollView>

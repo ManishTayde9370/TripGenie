@@ -1,38 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardItinerary"
+    android:id="@+id/itineraryCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:padding="12dp"
-    android:backgroundTint="@android:color/white"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="6dp">
+    android:layout_margin="10dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@color/white"
+    app:strokeColor="@color/md_theme_light_primary"
+    app:strokeWidth="1dp"
+    app:rippleColor="@color/md_theme_light_secondary">
 
     <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <!-- Day -->
+        <!-- Day Badge -->
         <TextView
-            android:id="@+id/tvDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/dayTitle"
             android:text="Day 1"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:background="@drawable/bg_day_badge"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-        <!-- Details -->
+        <!-- Divider -->
+        <View
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="50dp"
+            android:layout_height="3dp"
+            android:background="@color/md_theme_light_primary" />
+
+        <!-- Activities -->
         <TextView
-            android:id="@+id/tvDetails"
+            android:id="@+id/dayDetails"
+            android:text="• Visit museum\n• Lunch at local cafe\n• Evening walk"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp"
+            android:textColor="#212121"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hotel, sightseeing, food..."
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:textColor="@android:color/black" />
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

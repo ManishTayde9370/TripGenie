@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Basic colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color> <!-- Material Red -->
-    <color name="primary">#4FACFE</color> <!-- Example: gradient start -->
-    <color name="secondary">#00F2FE</color> <!-- Example: gradient end -->
-    <color name="purple_500">#6200EE</color> <!-- Example: purple 500 -->"
+    <color name="purple_700">#3700B3</color>
+
+    <!-- App brand / gradient colors -->
+    <color name="primary">#4FACFE</color> <!-- Gradient start -->
+    <color name="secondary">#00F2FE</color> <!-- Gradient end -->
+    <color name="purple_500">#6200EE</color> <!-- Purple 500 -->
+
+    <!-- Material 3 theme colors -->
+    <color name="md_theme_light_primary">#2196F3</color>        <!-- Blue -->
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_secondary">#03A9F4</color>      <!-- Light Blue -->
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#212121</color>
 </resources>

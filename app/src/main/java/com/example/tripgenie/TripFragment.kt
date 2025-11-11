@@ -1,32 +1,29 @@
 package com.example.tripgenie
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
-import java.util.*
 
 class TripFragment : Fragment() {
 
-    private val apiKey = "AIzaSyBx39i-ncFCJvmcjoJR3vfHCLyljZGEdIE" // Your Gemini API Key
-    private val client = OkHttpClient()
-    private lateinit var rvItinerary: RecyclerView
+    private lateinit var placeInput: EditText
+    private lateinit var daysInput: EditText
+    private lateinit var budgetInput: EditText
+    private lateinit var travelersInput: EditText
+    private lateinit var generateButton: Button
+    private lateinit var itineraryRecyclerView: RecyclerView
+    private lateinit var adapter: ItineraryAdapter
+    private val itineraryList = mutableListOf<String>()
+
+    private val apiKey = "AIzaSyAbYJWDPqpYoXrxcpRInN51DygIGyzxvEE"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,131 +32,76 @@ class TripFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_trip, container, false)
 
-        val etDestination: EditText = view.findViewById(R.id.etDestination)
-        val etStartDate: EditText = view.findViewById(R.id.etStartDate)
-        val etEndDate: EditText = view.findViewById(R.id.etEndDate)
-        val etTravelers: EditText = view.findViewById(R.id.etTravelers)
-        val btnGenerate: MaterialButton = view.findViewById(R.id.btnGeneratePlan)
-        rvItinerary = view.findViewById(R.id.rvItinerary)
+        placeInput = view.findViewById(R.id.placeInput)
+        daysInput = view.findViewById(R.id.daysInput)
+        budgetInput = view.findViewById(R.id.budgetInput)
+        travelersInput = view.findViewById(R.id.travelersInput)
+        generateButton = view.findViewById(R.id.generateButton)
+        itineraryRecyclerView = view.findViewById(R.id.itineraryRecyclerView)
 
-        rvItinerary.layoutManager = LinearLayoutManager(requireContext())
+        adapter = ItineraryAdapter(itineraryList)
+        itineraryRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        itineraryRecyclerView.adapter = adapter
 
-        // Date pickers
-        val calendar = Calendar.getInstance()
-        etStartDate.setOnClickListener {
-            DatePickerDialog(requireContext(), { _, year, month, day ->
-                etStartDate.setText("$day/${month + 1}/$year")
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
-        }
+        generateButton.setOnClickListener {
+            val place = placeInput.text.toString().trim()
+            val days = daysInput.text.toString().trim()
+            val travelers = travelersInput.text.toString().trim()
+            val budget = budgetInput.text.toString().trim() // still collected if you show it in UI later
 
-        etEndDate.setOnClickListener {
-            DatePickerDialog(requireContext(), { _, year, month, day ->
-                etEndDate.setText("$day/${month + 1}/$year")
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
-        }
-
-        // Button click
-        btnGenerate.setOnClickListener {
-            val destination = etDestination.text.toString()
-            val start = etStartDate.text.toString()
-            val end = etEndDate.text.toString()
-            val travelers = etTravelers.text.toString()
-
-            if (destination.isEmpty() || start.isEmpty() || end.isEmpty() || travelers.isEmpty()) {
+            if (place.isEmpty() || days.isEmpty() || budget.isEmpty() || travelers.isEmpty()) {
                 Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
             } else {
-                generateTripPlan(destination, start, end, travelers)
+                generateTripPlan(place, days, travelers)
             }
         }
 
         return view
     }
 
-    private fun generateTripPlan(destination: String, start: String, end: String, travelers: String) {
-        val prompt = "Plan a ${travelers}-person trip to $destination from $start to $end. Include hotels, food, sightseeing, and safety tips in a Day 1, Day 2 format."
+    private fun generateTripPlan(place: String, days: String, travelers: String) {
+        val model = GenerativeModel(
+            modelName = "gemini-2.5-flash",
+            apiKey = apiKey
+        )
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val prompt = """
+            Create a day-wise itinerary only (no tips, no budget, no hotels) 
+            for $travelers travelers visiting $place for $days days.
+            Use the format:
+            Day 1: ...
+            Day 2: ...
+        """.trimIndent()
+
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val url =
-                    "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=$apiKey"
+                itineraryList.clear()
+                adapter.notifyDataSetChanged()
 
-                val jsonBody = """
-                {
-                  "contents": [
-                    {
-                      "parts": [
-                        {"text": "$prompt"}
-                      ]
-                    }
-                  ]
-                }
-                """.trimIndent()
+                Toast.makeText(requireContext(), "Generating itinerary...", Toast.LENGTH_SHORT).show()
 
-                val body = jsonBody.toRequestBody("application/json".toMediaTypeOrNull())
+                val response = model.generateContent(prompt)
+                val text = response.text ?: "No response received."
 
-                val request = Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .build()
+                val lines = text.split("\n").filter { it.isNotBlank() }
+                var currentDay = ""
+                val formatted = mutableListOf<String>()
 
-                val response = client.newCall(request).execute()
-                val responseData = response.body?.string()
-
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful && responseData != null) {
-                        val jsonResponse = JSONObject(responseData)
-                        val outputText = jsonResponse
-                            .getJSONArray("candidates")
-                            .getJSONObject(0)
-                            .getJSONObject("content")
-                            .getJSONArray("parts")
-                            .getJSONObject(0)
-                            .getString("text")
-
-                        // Parse into day-wise itinerary
-                        val itineraryItems = mutableListOf<ItineraryItem>()
-                        val lines = outputText.split("\n")
-                        var currentDay = ""
-                        val sb = StringBuilder()
-
-                        for (line in lines) {
-                            if (line.trim().startsWith("Day")) {
-                                if (currentDay.isNotEmpty()) {
-                                    itineraryItems.add(
-                                        ItineraryItem(
-                                            currentDay,
-                                            sb.toString().trim()
-                                        )
-                                    )
-                                    sb.clear()
-                                }
-                                currentDay = line.trim()
-                            } else {
-                                sb.appendLine(line.trim())
-                            }
-                        }
-                        if (currentDay.isNotEmpty()) {
-                            itineraryItems.add(
-                                ItineraryItem(
-                                    currentDay,
-                                    sb.toString().trim()
-                                )
-                            )
-                        }
-
-                        rvItinerary.adapter = ItineraryAdapter(itineraryItems)
+                for (line in lines) {
+                    if (line.startsWith("Day", ignoreCase = true)) {
+                        if (currentDay.isNotEmpty()) formatted.add(currentDay)
+                        currentDay = line
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Failed: ${response.message}\n$responseData",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        currentDay += "\n$line"
                     }
                 }
+                if (currentDay.isNotEmpty()) formatted.add(currentDay)
+
+                itineraryList.addAll(formatted)
+                adapter.notifyDataSetChanged()
+
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_LONG).show()
-                }
+                Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
             }
         }
     }
