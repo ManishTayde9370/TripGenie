@@ -27,7 +27,8 @@ class ProfileFragment : Fragment() {
         val btnSaveProfile = view.findViewById<MaterialButton>(R.id.btnSaveProfile)
         val logoutButton = view.findViewById<MaterialButton>(R.id.logoutButton)
 
-        val session = SessionManager(requireContext())
+        // Use singleton instance
+        val session = SessionManager.getInstance(requireContext())
 
         // Display current user info
         userName.text = session.getUserName() ?: "Traveler"

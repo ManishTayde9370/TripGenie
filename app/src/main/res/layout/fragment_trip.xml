@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="20dp"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:background="@drawable/home_gradient"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,101 +22,129 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!-- Destination Input -->
-    <com.google.android.material.textfield.TextInputLayout
+    <!-- Inputs Container -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Enter destination"
-        app:boxStrokeColor="@color/md_theme_light_primary"
-        app:hintTextColor="@color/md_theme_light_onPrimary">
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/placeInput"
-            android:inputType="text"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/white"
-            android:padding="12dp"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:hint="Enter destination"
+            app:boxStrokeColor="@color/md_theme_light_primary"
+            app:hintTextColor="@color/md_theme_light_onPrimary">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/placeInput"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Number of Days Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Number of days"
-        app:boxStrokeColor="@color/md_theme_light_primary"
-        app:hintTextColor="@color/md_theme_light_onPrimary">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/daysInput"
-            android:inputType="number"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/white"
-            android:padding="12dp"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:hint="Number of days"
+            app:boxStrokeColor="@color/md_theme_light_primary"
+            app:hintTextColor="@color/md_theme_light_onPrimary">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/daysInput"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Budget Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Estimated budget (₹)"
-        app:boxStrokeColor="@color/md_theme_light_primary"
-        app:hintTextColor="@color/md_theme_light_onPrimary">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/budgetInput"
-            android:inputType="number"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/white"
-            android:padding="12dp"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:hint="Estimated budget (₹)"
+            app:boxStrokeColor="@color/md_theme_light_primary"
+            app:hintTextColor="@color/md_theme_light_onPrimary">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/budgetInput"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Travelers Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Number of travelers"
-        app:boxStrokeColor="@color/md_theme_light_primary"
-        app:hintTextColor="@color/md_theme_light_onPrimary">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/travelersInput"
-            android:inputType="number"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/white"
-            android:padding="12dp"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:hint="Number of travelers"
+            app:boxStrokeColor="@color/md_theme_light_primary"
+            app:hintTextColor="@color/md_theme_light_onPrimary">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/travelersInput"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
-    <!-- Generate Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/generateButton"
         android:text="Generate Itinerary"
         android:textAllCaps="false"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cornerRadius="16dp"
         android:textColor="@color/md_theme_light_onPrimary"
         app:backgroundTint="@color/md_theme_light_primary" />
 
-    <!-- RecyclerView for Cards -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/white" />
+
+    <!-- Empty State View -->
+    <LinearLayout
+        android:id="@+id/emptyStateView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_auto_awesome"
+            app:tint="@color/white"
+            android:alpha="0.5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your trips will appear here"
+            android:textColor="@color/white"
+            android:alpha="0.7"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/itineraryRecyclerView"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:visibility="gone"
         android:overScrollMode="never" />
 
 </LinearLayout>

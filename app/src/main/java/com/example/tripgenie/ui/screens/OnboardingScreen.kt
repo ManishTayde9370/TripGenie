@@ -9,6 +9,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,12 +17,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tripgenie.R
+import com.example.tripgenie.SessionManager
 import com.example.tripgenie.ui.theme.GradientEnd
 import com.example.tripgenie.ui.theme.GradientStart
 import kotlinx.coroutines.launch
@@ -35,6 +38,10 @@ data class OnboardingPage(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(onFinish: () -> Unit) {
+    val context = LocalContext.current
+    // Use singleton instance
+    val sessionManager = remember { SessionManager.getInstance(context) }
+    
     val pages = listOf(
         OnboardingPage(
             "Plan trips with AI ✈️",
@@ -99,7 +106,10 @@ fun OnboardingScreen(onFinish: () -> Unit) {
                 // Buttons
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (pagerState.currentPage != pages.size - 1) {
-                        TextButton(onClick = onFinish) {
+                        TextButton(onClick = {
+                            sessionManager.setOnboardingCompleted()
+                            onFinish()
+                        }) {
                             Text("Skip", color = Color.White)
                         }
                         Button(
@@ -114,7 +124,10 @@ fun OnboardingScreen(onFinish: () -> Unit) {
                         }
                     } else {
                         Button(
-                            onClick = onFinish,
+                            onClick = {
+                                sessionManager.setOnboardingCompleted()
+                                onFinish()
+                            },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = GradientStart)
                         ) {
                             Text("Get Started")

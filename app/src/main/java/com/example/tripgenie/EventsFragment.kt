@@ -32,7 +32,7 @@ data class EventItem(
 
 class EventsFragment : Fragment() {
 
-    // ✅ Replace with your Ticketmaster API key
+    //  Replace with your Ticketmaster API key
     private val apiKey = "B2fuVCmAXBGRuuKlK6TYzZb35QIkY4tC"
 
     private val client = OkHttpClient()

@@ -1,7 +1,7 @@
 package com.example.tripgenie.network
 
 /**
- * Unified model for Amadeus hotel offers
+ * Enhanced model for Amadeus hotel offers
  */
 data class HotelOfferUnified(
     val hotelId: String,
@@ -13,5 +13,10 @@ data class HotelOfferUnified(
     val amenities: String,
     val roomType: String,
     val totalPrice: Double,
-    val cityCode: String
+    val cityCode: String,
+    val checkInDate: String,
+    val checkOutDate: String,
+    val mealPlan: String, // e.g. "Breakfast included"
+    val cancellationPolicy: String,
+    val imageUrl: String? = null
 )

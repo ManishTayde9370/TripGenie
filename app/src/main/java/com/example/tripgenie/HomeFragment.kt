@@ -24,26 +24,14 @@ class HomeFragment : Fragment() {
         val btnSafety = view.findViewById<MaterialButton>(R.id.btnSafety)
         val welcomeText = view.findViewById<TextView>(R.id.welcomeText)
 
-        // 🧠 Fetch user name
-        val session = SessionManager(requireContext())
+        // 🧠 Fetch user name using singleton instance
+        val session = SessionManager.getInstance(requireContext())
         val userName = session.getUserName() ?: "Traveler"
 
         // ⏰ Get time-based greeting
         val greeting = getGreetingMessage()
         welcomeText.text = "$greeting, $userName!"
 
-//        btnSafety.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .setCustomAnimations(
-//                    R.anim.slide_in_right,
-//                    R.anim.slide_out_left,
-//                    R.anim.slide_in_left,
-//                    R.anim.slide_out_right
-//                )
-//                .replace(R.id.fragmentContainer, SafetyActivity())
-//                .addToBackStack(null)
-//                .commit()
-//        }
         btnSafety.setOnClickListener {
             val intent = Intent(requireContext(), SafetyActivity::class.java)
             startActivity(intent)

@@ -18,7 +18,8 @@ class LoginActivity : AppCompatActivity() {
         val btnLogin = findViewById<MaterialButton>(R.id.btnLogin)
         val tvSignupRedirect = findViewById<TextView>(R.id.tvSignupRedirect)
 
-        val sessionManager = SessionManager(this)
+        // Use singleton instance
+        val sessionManager = SessionManager.getInstance(this)
 
         btnLogin.setOnClickListener {
             val userEmail = email.text.toString().trim()
@@ -27,13 +28,12 @@ class LoginActivity : AppCompatActivity() {
             if (userEmail.isEmpty() || userPassword.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             } else {
-                // ✅ (Temporary local logic) Assume login success
-                // Later replace with Firebase/Backend verification
+                //  (Temporary local logic) Assume login succes
 
                 // Get previously signed-up name, or fallback
                 val userName = sessionManager.getUserName() ?: "Traveler"
 
-                // ✅ Save active session again to ensure consistency
+                // Save active session again to ensure consistency
                 sessionManager.saveUser(userName, userEmail)
 
                 Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()

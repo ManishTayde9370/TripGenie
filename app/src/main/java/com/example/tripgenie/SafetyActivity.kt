@@ -19,7 +19,7 @@ import retrofit2.Response
 
 class SafetyActivity : AppCompatActivity() {
 
-    private val apiKey = "f17a1ba424f3ad9a36403d6c2c0607b6" // ✅ your weather API key
+    private val apiKey = "f17a1ba424f3ad9a36403d6c2c0607b6"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class SafetyActivity : AppCompatActivity() {
 
             textResult.text = "Fetching safety data for $city..."
 
-            // 🌦 Step 1: Fetch Weather Data
+
             ApiClient.instance.getWeather(city, apiKey)
                 .enqueue(object : Callback<WeatherResponse> {
                     override fun onResponse(
@@ -50,7 +50,7 @@ class SafetyActivity : AppCompatActivity() {
                             val weather = data.weather[0].main
                             val temp = data.main.temp
 
-                            // ✅ Step 2: Fetch real data from your SheetDB API
+
                             val sheetService = SheetDBClient.retrofit.create(SafetyApiService::class.java)
                             sheetService.getCityData(city)
                                 .enqueue(object : Callback<List<SheetSafetyData>> {
@@ -63,8 +63,6 @@ class SafetyActivity : AppCompatActivity() {
 
                                             val crime = sheetData.crime_rate.toIntOrNull()
                                             val accidents = sheetData.accident_rate.toIntOrNull()
-
-                                            // ✅ If crime or accidents missing, still show weather
                                             if (crime != null && accidents != null) {
                                                 calculateAndShowResult(city, weather, temp, crime, accidents, textResult)
                                             } else {
@@ -91,7 +89,7 @@ class SafetyActivity : AppCompatActivity() {
                                     }
 
                                     override fun onFailure(call: Call<List<SheetSafetyData>>, t: Throwable) {
-                                        // ⚠ If SheetDB fails, still show weather
+
                                         textResult.text = """
                                             🏙 City: $city
                                             🌦 Weather: $weather (${temp}°C)

@@ -49,7 +49,7 @@ class AmadeusService {
     }
 
     /**
-     * Fetch near real-time flight prices from multiple airlines
+     * Fetch near real-time flight prices from multiple airlines in INR
      */
     fun getFlightOffers(
         token: String,
@@ -58,7 +58,13 @@ class AmadeusService {
         date: String,
         adults: Int
     ): String? {
-        val url = "$baseUrl/v2/shopping/flight-offers?originLocationCode=$origin&destinationLocationCode=$destination&departureDate=$date&adults=$adults&max=20"
+        val url = "$baseUrl/v2/shopping/flight-offers" +
+                "?originLocationCode=$origin" +
+                "&destinationLocationCode=$destination" +
+                "&departureDate=$date" +
+                "&adults=$adults" +
+                "&currencyCode=INR" +
+                "&max=20"
         
         val request = Request.Builder()
             .url(url)
@@ -72,6 +78,59 @@ class AmadeusService {
             }
         } catch (e: IOException) {
             Log.e("AmadeusService", "Error fetching flight offers", e)
+            null
+        }
+    }
+
+    /**
+     * Fetch hotel list by city code (Amadeus Hotel List API)
+     */
+    fun getHotelsByCity(token: String, cityCode: String): String? {
+        val url = "$baseUrl/v1/reference-data/locations/hotels/by-city?cityCode=$cityCode"
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+
+        return try {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) return null
+                response.body?.string()
+            }
+        } catch (e: IOException) {
+            null
+        }
+    }
+
+    /**
+     * Fetch advanced hotel offers/prices in INR with dates (Amadeus Hotel Offers Search API)
+     */
+    fun getHotelOffers(
+        token: String, 
+        hotelIds: String,
+        checkInDate: String,
+        checkOutDate: String,
+        adults: Int
+    ): String? {
+        // MANDATORY: Use currency=INR as requested
+        val url = "$baseUrl/v3/shopping/hotel-offers" +
+                "?hotelIds=$hotelIds" +
+                "&checkInDate=$checkInDate" +
+                "&checkOutDate=$checkOutDate" +
+                "&adults=$adults" +
+                "&currency=INR"
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+
+        return try {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) return null
+                response.body?.string()
+            }
+        } catch (e: IOException) {
             null
         }
     }

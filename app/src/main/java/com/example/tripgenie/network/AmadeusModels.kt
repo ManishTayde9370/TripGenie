@@ -10,9 +10,13 @@ data class FlightOfferUnified(
     val price: Double,
     val currency: String,
     val stops: Int,
-    val duration: String, // ISO 8601 duration
-    val durationMinutes: Int, // Total duration in minutes for comparison
-    val label: String? = null // "Cheapest", "Fastest", "Best Value"
+    val duration: String,
+    val durationMinutes: Int,
+    val departureTime: String,
+    val arrivalTime: String,
+    val originCity: String,
+    val destinationCity: String,
+    val label: String? = null
 )
 
 data class AmadeusTokenResponse(

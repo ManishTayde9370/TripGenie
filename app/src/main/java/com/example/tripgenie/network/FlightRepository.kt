@@ -3,10 +3,9 @@ package com.example.tripgenie.network
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.time.Duration
 
 /**
- * Repository to manage near real-time flight prices from multiple airlines
+ * Repository to manage near real-time flight prices from multiple airlines in INR
  */
 class FlightRepository(private val amadeusService: AmadeusService) {
 
@@ -24,7 +23,7 @@ class FlightRepository(private val amadeusService: AmadeusService) {
         val response = amadeusService.fetchAccessToken()
         if (response != null) {
             cachedToken = response.access_token
-            tokenExpiryTime = System.currentTimeMillis() + (response.expires_in * 1000) - 60000 // 1 min buffer
+            tokenExpiryTime = System.currentTimeMillis() + (response.expires_in * 1000) - 60000
             cachedToken
         } else {
             null
@@ -32,11 +31,13 @@ class FlightRepository(private val amadeusService: AmadeusService) {
     }
 
     /**
-     * Fetch and compare flight offers using industry-standard travel API
+     * Fetch and compare flight offers in INR using industry-standard travel API
      */
     suspend fun searchFlights(
         origin: String,
+        originCity: String,
         destination: String,
+        destinationCity: String,
         date: String,
         adults: Int
     ): List<FlightOfferUnified> = withContext(Dispatchers.IO) {
@@ -54,9 +55,16 @@ class FlightRepository(private val amadeusService: AmadeusService) {
             for (i in 0 until dataArray.length()) {
                 val offerJson = dataArray.getJSONObject(i)
                 val itineraries = offerJson.getJSONArray("itineraries").getJSONObject(0)
-                val durationStr = itineraries.getString("duration") // e.g. PT2H30M
+                val durationStr = itineraries.getString("duration")
                 val segments = itineraries.getJSONArray("segments")
-                val carrierCode = segments.getJSONObject(0).getString("carrierCode")
+                
+                val firstSegment = segments.getJSONObject(0)
+                val lastSegment = segments.getJSONObject(segments.length() - 1)
+                
+                val departureTime = firstSegment.getJSONObject("departure").getString("at").substring(11, 16)
+                val arrivalTime = lastSegment.getJSONObject("arrival").getString("at").substring(11, 16)
+                
+                val carrierCode = firstSegment.getString("carrierCode")
                 val airlineName = carriers.optString(carrierCode, carrierCode)
                 
                 val priceObj = offerJson.getJSONObject("price")
@@ -72,10 +80,14 @@ class FlightRepository(private val amadeusService: AmadeusService) {
                         airlineCode = carrierCode,
                         airlineName = airlineName,
                         price = totalPrice,
-                        currency = currency,
+                        currency = if (currency == "INR") "₹" else currency,
                         stops = stops,
                         duration = formatDuration(durationStr),
-                        durationMinutes = durationMinutes
+                        durationMinutes = durationMinutes,
+                        departureTime = departureTime,
+                        arrivalTime = arrivalTime,
+                        originCity = originCity,
+                        destinationCity = destinationCity
                     )
                 )
             }
@@ -86,16 +98,10 @@ class FlightRepository(private val amadeusService: AmadeusService) {
         }
     }
 
-    /**
-     * Identifies cheapest, fastest, and best value options
-     */
     private fun applyComparisonLogic(offers: List<FlightOfferUnified>): List<FlightOfferUnified> {
         if (offers.isEmpty()) return offers
-
         val cheapest = offers.minByOrNull { it.price }
         val fastest = offers.minByOrNull { it.durationMinutes }
-        
-        // Best value: balancing price and duration (normalized simple score)
         val bestValue = offers.minByOrNull { 
             (it.price / (cheapest?.price ?: 1.0)) + (it.durationMinutes.toDouble() / (fastest?.durationMinutes ?: 1))
         }
@@ -105,22 +111,16 @@ class FlightRepository(private val amadeusService: AmadeusService) {
             if (offer.id == cheapest?.id) labels.add("💰 Cheapest")
             if (offer.id == fastest?.id) labels.add("⚡ Fastest")
             if (offer.id == bestValue?.id && labels.isEmpty()) labels.add("⭐ Best Value")
-            
             offer.copy(label = labels.firstOrNull())
         }
     }
 
     private fun parseDurationToMinutes(duration: String): Int {
-        return try {
-            // Basic parsing for "PT2H30M"
-            val hMatch = Regex("(\\d+)H").find(duration)
-            val mMatch = Regex("(\\d+)M").find(duration)
-            val hours = hMatch?.groupValues?.get(1)?.toInt() ?: 0
-            val minutes = mMatch?.groupValues?.get(1)?.toInt() ?: 0
-            (hours * 60) + minutes
-        } catch (e: Exception) {
-            0
-        }
+        val hMatch = Regex("(\\d+)H").find(duration)
+        val mMatch = Regex("(\\d+)M").find(duration)
+        val hours = hMatch?.groupValues?.get(1)?.toInt() ?: 0
+        val minutes = mMatch?.groupValues?.get(1)?.toInt() ?: 0
+        return (hours * 60) + minutes
     }
 
     private fun formatDuration(duration: String): String {

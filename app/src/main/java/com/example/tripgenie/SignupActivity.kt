@@ -20,7 +20,8 @@ class SignupActivity : AppCompatActivity() {
         val btnSignup = findViewById<MaterialButton>(R.id.btnSignup)
         val tvLoginRedirect = findViewById<TextView>(R.id.tvLoginRedirect)
 
-        val sessionManager = SessionManager(this)
+        // Use singleton instance
+        val sessionManager = SessionManager.getInstance(this)
 
         btnSignup.setOnClickListener {
             val userName = name.text.toString().trim()
@@ -36,11 +37,11 @@ class SignupActivity : AppCompatActivity() {
                     Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
-                    // ✅ Save user info in local session
+                    // Save user info in local session
                     sessionManager.saveUser(userName, userEmail)
                     Toast.makeText(this, "Signup Successful!", Toast.LENGTH_SHORT).show()
 
-                    // ✅ Navigate to main home screen
+                    // Navigate to main home screen
                     val intent = Intent(this, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)

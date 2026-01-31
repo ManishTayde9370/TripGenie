@@ -13,12 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tripgenie.SessionManager
 import com.example.tripgenie.ui.theme.GradientEnd
 import com.example.tripgenie.ui.theme.GradientStart
 
@@ -32,6 +34,10 @@ fun SignupScreen(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    // Use singleton instance
+    val sessionManager = remember { SessionManager.getInstance(context) }
 
     Box(
         modifier = Modifier
@@ -132,7 +138,8 @@ fun SignupScreen(
 
                 Button(
                     onClick = {
-                        if (name.isNotBlank() && email.isNotBlank() && password.isNotBlank() && password == confirmPassword) {
+                        if (name.isNotBlank() && email.isNotBlank() && password.length >= 6 && password == confirmPassword) {
+                            sessionManager.saveUser(name, email)
                             onSignupSuccess()
                         }
                     },

@@ -1,44 +1,41 @@
 package com.example.tripgenie
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.fragment.app.Fragment
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import com.example.tripgenie.navigation.NavGraph
+import com.example.tripgenie.ui.theme.TripGenieTheme
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
-
-        if (savedInstanceState == null) {
-            loadFragment(HomeFragment())
-        }
-
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    loadFragment(HomeFragment())
-                    true
+        
+        // enableEdgeToEdge() handles status bar and navigation bar padding correctly
+        enableEdgeToEdge()
+        
+        setContent {
+            TripGenieTheme {
+                // Ensure Surface occupies the full screen and provides a default background
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    MainContent()
                 }
-                R.id.nav_trips -> {
-                    loadFragment(TripFragment())
-                    true
-                }
-                R.id.nav_profile -> {
-                    loadFragment(ProfileFragment())
-                    true
-                }
-                else -> false
             }
         }
     }
+}
 
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
-            .commit()
-    }
+@Composable
+fun MainContent() {
+    val navController = rememberNavController()
+    NavGraph(navController = navController)
 }

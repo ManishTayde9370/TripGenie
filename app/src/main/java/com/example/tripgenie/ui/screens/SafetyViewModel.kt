@@ -35,19 +35,26 @@ class SafetyViewModel : ViewModel() {
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful && !response.body().isNullOrEmpty()) {
                         val data = response.body()!!
-                        // Assuming the first match is the relevant city data
                         val cityData = data[0]
                         
-                        // Example mapping logic
-                        safetyScore.value = (cityData.safety_score ?: "0").toFloat() / 100f
+                        // 🧠 Logic: Calculate safety score from available sheet data
+                        val crime = cityData.crime_rate.toIntOrNull() ?: 0
+                        val accident = cityData.accident_rate.toIntOrNull() ?: 0
                         
-                        // Mocking alerts based on score or additional sheet fields if they exist
-                        // For now, we use the sheet data to populate specific alerts
-                        alerts.add(SafetyAlertItem("Local Safety Level", "City: ${cityData.city}, Level: ${cityData.safety_level}", "Medium"))
+                        // Simple inverse calculation: higher rates = lower safety score
+                        val calculatedScore = (100 - (crime + accident) / 2).coerceIn(0, 100)
+                        safetyScore.value = calculatedScore / 100f
                         
-                        if ((cityData.safety_score?.toInt() ?: 100) < 50) {
-                            alerts.add(SafetyAlertItem("Caution Advised", "Safety score is currently low for this area.", "High"))
+                        val level = when {
+                            calculatedScore > 70 -> "High"
+                            calculatedScore > 40 -> "Moderate"
+                            else -> "Low"
                         }
+
+                        alerts.add(SafetyAlertItem("Safety Level", "The current safety level is rated as $level.", "Medium"))
+                        alerts.add(SafetyAlertItem("Crime Statistics", "Reported crime index for this area: $crime", if (crime > 50) "High" else "Medium"))
+                        alerts.add(SafetyAlertItem("Road Safety", "Accident frequency index: $accident", if (accident > 50) "High" else "Medium"))
+
                     } else {
                         error.value = "No data found for $city"
                     }

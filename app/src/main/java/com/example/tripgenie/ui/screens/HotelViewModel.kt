@@ -31,9 +31,9 @@ class HotelViewModel : ViewModel() {
     fun getCityNames() = cityToCodeMap.keys.toList()
 
     /**
-     * Search hotels and their prices in INR using industry-standard Amadeus APIs
+     * Search hotels with specific dates and guests in INR using Amadeus APIs
      */
-    fun searchHotels(cityName: String) {
+    fun searchHotels(cityName: String, checkIn: String, checkOut: String, adults: Int) {
         val cityCode = cityToCodeMap[cityName]
         if (cityCode == null) {
             error.value = "Invalid city selection."
@@ -45,12 +45,12 @@ class HotelViewModel : ViewModel() {
             error.value = null
             hotelOffers.clear()
 
-            val results = hotelRepository.searchHotels(cityCode)
+            val results = hotelRepository.searchHotels(cityCode, checkIn, checkOut, adults)
             
             if (results.isNotEmpty()) {
                 hotelOffers.addAll(results)
             } else {
-                error.value = "No hotel offers found for $cityName at the moment."
+                error.value = "No hotels found for these dates in $cityName."
             }
             isLoading.value = false
         }

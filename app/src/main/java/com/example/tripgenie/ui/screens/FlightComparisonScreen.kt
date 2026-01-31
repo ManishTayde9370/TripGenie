@@ -2,6 +2,7 @@ package com.example.tripgenie.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FlightTakeoff
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.*
@@ -23,17 +25,34 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tripgenie.network.FlightOfferUnified
 import com.example.tripgenie.ui.theme.GradientStart
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlightComparisonScreen(
     onBack: () -> Unit,
+    onNavigateToDetails: (FlightOfferUnified) -> Unit,
     viewModel: FlightViewModel = viewModel()
 ) {
-    var fromCode by remember { mutableStateOf("DEL") }
-    var toCode by remember { mutableStateOf("BOM") }
-    var date by remember { mutableStateOf("2024-12-01") }
+    val cityNames = viewModel.getCityNames()
+    
+    var fromCity by remember { mutableStateOf("Delhi") }
+    var toCity by remember { mutableStateOf("Mumbai") }
+    var date by remember { mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())) }
     var adults by remember { mutableStateOf("1") }
+
+    var showFromMenu by remember { mutableStateOf(false) }
+    var showToMenu by remember { mutableStateOf(false) }
+    var showDatePicker by remember { mutableStateOf(false) }
+
+    val datePickerState = rememberDatePickerState(
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis >= System.currentTimeMillis() - 86400000 // Block past dates
+            }
+        }
+    )
 
     val flights = viewModel.flightOffers
     val isLoading by viewModel.isLoading
@@ -42,6 +61,30 @@ fun FlightComparisonScreen(
 
     LaunchedEffect(error) {
         error?.let { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
+    }
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let { millis ->
+                        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        date = sdf.format(Date(millis))
+                    }
+                    showDatePicker = false
+                }) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
     }
 
     Scaffold(
@@ -66,7 +109,7 @@ fun FlightComparisonScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // Search Section
+            // User-Friendly Search Section
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -76,31 +119,87 @@ fun FlightComparisonScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        OutlinedTextField(
-                            value = fromCode,
-                            onValueChange = { fromCode = it.uppercase() },
-                            label = { Text("From (IATA)") },
-                            modifier = Modifier.weight(1f),
-                            maxLines = 1,
-                            leadingIcon = { Icon(Icons.Default.FlightTakeoff, null) }
-                        )
+                        // From City Selector
+                        Box(modifier = Modifier.weight(1f)) {
+                            OutlinedTextField(
+                                value = fromCity,
+                                onValueChange = {},
+                                label = { Text("From") },
+                                readOnly = true,
+                                modifier = Modifier.fillMaxWidth(),
+                                leadingIcon = { Icon(Icons.Default.FlightTakeoff, null) },
+                                trailingIcon = {
+                                    IconButton(onClick = { showFromMenu = true }) {
+                                        Icon(Icons.Default.KeyboardArrowDown, null)
+                                    }
+                                }
+                            )
+                            DropdownMenu(
+                                expanded = showFromMenu,
+                                onDismissRequest = { showFromMenu = false }
+                            ) {
+                                cityNames.forEach { name ->
+                                    DropdownMenuItem(
+                                        text = { Text(name) },
+                                        onClick = {
+                                            fromCity = name
+                                            showFromMenu = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                        
                         Spacer(modifier = Modifier.width(8.dp))
-                        OutlinedTextField(
-                            value = toCode,
-                            onValueChange = { toCode = it.uppercase() },
-                            label = { Text("To (IATA)") },
-                            modifier = Modifier.weight(1f),
-                            maxLines = 1
-                        )
+
+                        // To City Selector
+                        Box(modifier = Modifier.weight(1f)) {
+                            OutlinedTextField(
+                                value = toCity,
+                                onValueChange = {},
+                                label = { Text("To") },
+                                readOnly = true,
+                                modifier = Modifier.fillMaxWidth(),
+                                trailingIcon = {
+                                    IconButton(onClick = { showToMenu = true }) {
+                                        Icon(Icons.Default.KeyboardArrowDown, null)
+                                    }
+                                }
+                            )
+                            DropdownMenu(
+                                expanded = showToMenu,
+                                onDismissRequest = { showToMenu = false }
+                            ) {
+                                cityNames.forEach { name ->
+                                    DropdownMenuItem(
+                                        text = { Text(name) },
+                                        onClick = {
+                                            toCity = name
+                                            showToMenu = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
                     }
+                    
                     Spacer(modifier = Modifier.height(8.dp))
+                    
                     Row(modifier = Modifier.fillMaxWidth()) {
+                        // Date Picker Field
                         OutlinedTextField(
                             value = date,
-                            onValueChange = { date = it },
-                            label = { Text("Date (YYYY-MM-DD)") },
-                            modifier = Modifier.weight(1.5f),
-                            leadingIcon = { Icon(Icons.Default.Today, null) }
+                            onValueChange = {},
+                            label = { Text("Departure Date") },
+                            readOnly = true,
+                            modifier = Modifier
+                                .weight(1.5f)
+                                .clickable { showDatePicker = true },
+                            leadingIcon = {
+                                IconButton(onClick = { showDatePicker = true }) {
+                                    Icon(Icons.Default.Today, null)
+                                }
+                            }
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         OutlinedTextField(
@@ -111,19 +210,21 @@ fun FlightComparisonScreen(
                             leadingIcon = { Icon(Icons.Default.Person, null) }
                         )
                     }
+                    
                     Spacer(modifier = Modifier.height(16.dp))
+                    
                     Button(
                         onClick = { 
-                            viewModel.searchFlights(fromCode, toCode, date, adults.toIntOrNull() ?: 1)
+                            viewModel.searchFlights(fromCity, toCity, date, adults.toIntOrNull() ?: 1)
                         },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = GradientStart),
                         enabled = !isLoading
                     ) {
                         if (isLoading) {
-                            CircularProgressIndicator(size = 20.dp, color = Color.White, strokeWidth = 2.dp)
+                            CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White, strokeWidth = 2.dp)
                         } else {
-                            Text("Find near real-time flight prices")
+                            Text("Compare near real-time flight prices")
                         }
                     }
                 }
@@ -142,14 +243,17 @@ fun FlightComparisonScreen(
                 ) {
                     item {
                         Text(
-                            "Flight Offers from Industry-Standard Travel API",
+                            "Flight Offers in INR (₹) from industry-standard travel API",
                             style = MaterialTheme.typography.labelMedium,
                             color = Color.Gray,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
                     items(flights) { flight ->
-                        FlightCard(flight)
+                        FlightCard(flight) {
+                            viewModel.selectedFlight = flight
+                            onNavigateToDetails(flight)
+                        }
                     }
                 }
             }
@@ -158,9 +262,11 @@ fun FlightComparisonScreen(
 }
 
 @Composable
-fun FlightCard(flight: FlightOfferUnified) {
+fun FlightCard(flight: FlightOfferUnified, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -171,7 +277,7 @@ fun FlightCard(flight: FlightOfferUnified) {
             ) {
                 Column {
                     Text(text = flight.airlineName, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text(text = flight.airlineCode, fontSize = 12.sp, color = Color.Gray)
+                    Text(text = "${flight.originCity} → ${flight.destinationCity}", fontSize = 12.sp, color = Color.Gray)
                 }
                 Text(
                     text = "${flight.currency} ${flight.price}",
@@ -187,8 +293,8 @@ fun FlightCard(flight: FlightOfferUnified) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                InfoItem("Departure", flight.departureTime)
                 InfoItem("Duration", flight.duration)
-                InfoItem("Stops", if (flight.stops == 0) "Non-stop" else "${flight.stops} stop(s)")
                 
                 flight.label?.let {
                     Surface(

@@ -13,7 +13,7 @@
         android:padding="20dp"
         android:gravity="center_horizontal">
 
-        <!-- 🌇 Header Section -->
+        <!--  Header Section -->
         <TextView
             android:id="@+id/tvHeader"
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_marginBottom="20dp"
             android:paddingHorizontal="12dp" />
 
-        <!-- 🏙 City Search Input -->
+        <!--  City Search Input -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- 🔍 Search Button -->
+        <!--  Search Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSearchEvents"
             android:layout_width="match_parent"
@@ -92,7 +92,7 @@
             app:backgroundTint="@color/purple_500" />
 
 
-        <!-- 🎫 RecyclerView Section -->
+        <!--  RecyclerView Section -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvEvents"
             android:layout_width="match_parent"
@@ -104,7 +104,7 @@
 
     </LinearLayout>
 
-    <!-- 🌀 Optional Progress Bar for Loading -->
+    <!--  Optional Progress Bar for Loading -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"

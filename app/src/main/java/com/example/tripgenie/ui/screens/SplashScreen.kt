@@ -22,14 +22,15 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(onTimeout: () -> Unit) {
-    val scale = remember { Animatable(0f) }
+    // Simplified scale to ensure it is always visible if something goes wrong
+    val scale = remember { Animatable(0.5f) }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(Unit) {
         scale.animateTo(
-            targetValue = 1.2f,
-            animationSpec = overshootInterpolator(0.4f)
+            targetValue = 1.0f,
+            animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
-        delay(2000L)
+        delay(1500L)
         onTimeout()
     }
 
@@ -48,21 +49,14 @@ fun SplashScreen(onTimeout: () -> Unit) {
                 painter = painterResource(id = R.drawable.ic_tripgenie_logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
-                    .size(150.dp)
+                    .size(180.dp)
                     .scale(scale.value)
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(48.dp))
             CircularProgressIndicator(
                 color = Color.White,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(32.dp)
             )
         }
     }
-}
-
-fun overshootInterpolator(tension: Float): AnimationSpec<Float> {
-    return spring(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = Spring.StiffnessLow
-    )
 }

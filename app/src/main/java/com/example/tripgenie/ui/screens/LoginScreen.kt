@@ -14,12 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tripgenie.SessionManager
 import com.example.tripgenie.ui.theme.GradientEnd
 import com.example.tripgenie.ui.theme.GradientStart
 import kotlinx.coroutines.launch
@@ -35,6 +37,9 @@ fun LoginScreen(
     
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    // Use singleton instance
+    val sessionManager = remember { SessionManager.getInstance(context) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -114,11 +119,12 @@ fun LoginScreen(
 
                     Button(
                         onClick = {
-                            if (email.isNotBlank() && password.isNotBlank()) {
+                            if (email.isNotBlank() && password.length >= 6) {
+                                sessionManager.saveUser("Traveler", email)
                                 onLoginSuccess()
                             } else {
                                 scope.launch {
-                                    snackbarHostState.showSnackbar("Invalid login: Please enter email and password")
+                                    snackbarHostState.showSnackbar("Invalid login: Use a valid email and 6+ char password")
                                 }
                             }
                         },
