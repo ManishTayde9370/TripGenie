@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+gradle.properties
+# Ignore Gradle properties as it now contains the fallback API key
