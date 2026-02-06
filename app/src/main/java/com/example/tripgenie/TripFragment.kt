@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 
 class TripFragment : Fragment() {
 
@@ -23,6 +24,9 @@ class TripFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var emptyStateView: View
     private lateinit var itineraryRecyclerView: RecyclerView
+    private lateinit var resultHeaderCard: MaterialCardView
+    private lateinit var tripSummaryTitle: TextView
+    private lateinit var tripSummaryDetails: TextView
     private lateinit var adapter: ItineraryAdapter
     
     private val viewModel: TripViewModel by viewModels()
@@ -43,6 +47,9 @@ class TripFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
         emptyStateView = view.findViewById(R.id.emptyStateView)
         itineraryRecyclerView = view.findViewById(R.id.itineraryRecyclerView)
+        resultHeaderCard = view.findViewById(R.id.resultHeaderCard)
+        tripSummaryTitle = view.findViewById(R.id.tripSummaryTitle)
+        tripSummaryDetails = view.findViewById(R.id.tripSummaryDetails)
 
         adapter = ItineraryAdapter(itineraryList)
         itineraryRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -54,18 +61,30 @@ class TripFragment : Fragment() {
             val place = placeInput.text.toString().trim()
             val days = daysInput.text.toString().trim()
             val travelers = travelersInput.text.toString().trim()
+            val budget = budgetInput.text.toString().trim()
 
-            if (place.isEmpty() || days.isEmpty() || travelers.isEmpty()) {
-                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+            if (place.isEmpty() || days.isEmpty() || budget.isEmpty()) {
+                Toast.makeText(requireContext(), "Please fill mandatory fields", Toast.LENGTH_SHORT).show()
             } else if (!isNetworkAvailable()) {
                 Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT).show()
             } else {
-                // Correctly match TripViewModel signature: generateTripPlan(place: String, days: String, travelers: String)
-                viewModel.generateTripPlan(place, days, travelers)
+                updateSummaryHeader(place, days, budget)
+                viewModel.generateTripPlan(
+                    destination = place,
+                    days = days,
+                    budget = budget,
+                    style = "Moderate",
+                    interests = "Sightseeing, Food"
+                )
             }
         }
 
         return view
+    }
+
+    private fun updateSummaryHeader(place: String, days: String, budget: String) {
+        tripSummaryTitle.text = "Trip to $place"
+        tripSummaryDetails.text = "$days Days | Moderate Style | Budget: ₹$budget"
     }
 
     private fun observeViewModel() {
@@ -76,13 +95,17 @@ class TripFragment : Fragment() {
             
             val hasData = newList.isNotEmpty()
             itineraryRecyclerView.visibility = if (hasData) View.VISIBLE else View.GONE
+            resultHeaderCard.visibility = if (hasData) View.VISIBLE else View.GONE
             emptyStateView.visibility = if (hasData) View.GONE else View.VISIBLE
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             generateButton.isEnabled = !isLoading
-            if (isLoading) emptyStateView.visibility = View.GONE
+            if (isLoading) {
+                emptyStateView.visibility = View.GONE
+                resultHeaderCard.visibility = View.GONE
+            }
         }
 
         viewModel.error.observe(viewLifecycleOwner) { errorMessage ->

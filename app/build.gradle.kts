@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,11 +19,24 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField(
-            "String",
-            "GEMINI_API_KEY",
-            "\"${project.findProperty("GEMINI_API_KEY") ?: ""}\""
-        )
+        // 🔐 Securely load Gemini API Key
+        // First try local.properties (Best Practice), then fallback to gradle.properties
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        
+        var apiKey = ""
+        
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.inputStream().use { localProperties.load(it) }
+            apiKey = localProperties.getProperty("gemini.api.key") ?: ""
+        }
+        
+        // Fallback to gradle.properties if not found in local.properties
+        if (apiKey.isBlank()) {
+            apiKey = project.findProperty("gemini_api_key") as? String ?: ""
+        }
+        
+        buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
     }
 
     buildFeatures {
