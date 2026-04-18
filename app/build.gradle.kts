@@ -1,52 +1,60 @@
 import java.util.Properties
-import java.io.FileInputStream
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
-    namespace = "com.example.tripgenie"
+    namespace = "com.manish.tripgenie"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.tripgenie"
+        applicationId = "com.manish.tripgenie"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // 🔐 Securely load Gemini API Key
-        // First try local.properties (Best Practice), then fallback to gradle.properties
+        // Load secrets from local.properties
         val localProperties = Properties()
         val localPropertiesFile = rootProject.file("local.properties")
         
-        var apiKey = ""
+        var geminiKey = ""
+        var amadeusId = ""
+        var amadeusSecret = ""
+        var mapsApiKey = ""
+        var ticketmasterKey = ""
+        var predictHqToken = ""
         
         if (localPropertiesFile.exists()) {
             localPropertiesFile.inputStream().use { localProperties.load(it) }
-            apiKey = localProperties.getProperty("gemini.api.key") ?: ""
+            geminiKey = localProperties.getProperty("GEMINI_API_KEY") ?: ""
+            amadeusId = localProperties.getProperty("AMADEUS_CLIENT_ID") ?: ""
+            amadeusSecret = localProperties.getProperty("AMADEUS_CLIENT_SECRET") ?: ""
+            mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: ""
+            ticketmasterKey = localProperties.getProperty("TICKETMASTER_API_KEY") ?: ""
+            predictHqToken = localProperties.getProperty("PREDICTHQ_TOKEN") ?: ""
         }
         
-        // Fallback to gradle.properties if not found in local.properties
-        if (apiKey.isBlank()) {
-            apiKey = project.findProperty("gemini_api_key") as? String ?: ""
-        }
-        
-        buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
+        buildConfigField("String", "AMADEUS_CLIENT_ID", "\"$amadeusId\"")
+        buildConfigField("String", "AMADEUS_CLIENT_SECRET", "\"$amadeusSecret\"")
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+        buildConfigField("String", "TICKETMASTER_API_KEY", "\"$ticketmasterKey\"")
+        buildConfigField("String", "PREDICTHQ_TOKEN", "\"$predictHqToken\"")
+
+        resValue("string", "google_maps_key", mapsApiKey)
     }
 
     buildFeatures {
         viewBinding = true
         buildConfig = true
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     compileOptions {
@@ -72,6 +80,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
 
+    // Google Maps & Places
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.android.libraries.places:places:4.1.0")
+    implementation("com.google.maps.android:android-maps-utils:3.8.2")
+
     // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -93,9 +107,18 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.8")
     implementation(libs.generativeai)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
-    implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.analytics)
+
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,0 +1,18 @@
+# This is an example file for local.properties.
+# Copy this file to local.properties and fill in your actual API keys.
+
+# Gemini AI API Key
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE
+
+# Ticketmaster API Key
+TICKETMASTER_API_KEY=YOUR_TICKETMASTER_API_KEY_HERE
+
+# PredictHQ API Token
+PREDICTHQ_TOKEN=YOUR_PREDICTHQ_TOKEN_HERE
+
+# Amadeus API Credentials
+AMADEUS_CLIENT_ID=YOUR_AMADEUS_CLIENT_ID_HERE
+AMADEUS_CLIENT_SECRET=YOUR_AMADEUS_CLIENT_SECRET_HERE
+
+# Google Maps API Key
+MAPS_API_KEY=YOUR_MAPS_API_KEY_HERE

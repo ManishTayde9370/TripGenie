@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.manish.tripgenie">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -8,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name=".TripGenieApp"
+        android:name="com.manish.tripgenie.TripGenieApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,6 +20,11 @@
         android:theme="@style/Theme.TripGenie"
         tools:targetApi="31"
         android:enableOnBackInvokedCallback="true">
+
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".MainActivity"
@@ -35,6 +41,7 @@
         <activity android:name=".SignupActivity" android:exported="false" />
         <activity android:name=".WelcomeActivity" android:exported="false" />
         <activity android:name=".SafetyActivity" android:exported="false" />
+        <activity android:name=".MapActivity" android:exported="false" />
 
     </application>
 

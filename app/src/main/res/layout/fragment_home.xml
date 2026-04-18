@@ -61,10 +61,24 @@
                 android:textColor="@android:color/white"
                 app:cornerRadius="24dp"
                 android:elevation="4dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="4dp"
                 app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:rippleColor="?attr/colorOnPrimaryContainer" />
+                app:iconPadding="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🗺 Map"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white"
+                app:cornerRadius="24dp"
+                android:elevation="4dp"
+                android:layout_marginEnd="4dp"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSafety"
@@ -78,8 +92,7 @@
                 app:cornerRadius="24dp"
                 android:elevation="4dp"
                 app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:rippleColor="?attr/colorOnPrimaryContainer" />
+                app:iconPadding="8dp" />
 
         </LinearLayout>
 
